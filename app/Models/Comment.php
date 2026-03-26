@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Comment extends Model
+{
+    protected $fillable = [
+        'id',
+        'post_id',
+        'name',
+        'email',
+        'body',
+    ];
+
+    public $incrementing = false;
+    protected $keyType = 'int';
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+}
