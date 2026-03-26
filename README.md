@@ -1,58 +1,281 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel JSONPlaceholder API Clone
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📌 Overview
 
-## About Laravel
+This project is a Laravel-based application that fetches data from the public API **JSONPlaceholder** and stores it in a local database using Eloquent ORM. It also exposes RESTful API endpoints secured with Basic Authentication.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Fetch data via Artisan command
+* Store data using Eloquent ORM
+* Normalized database structure
+* RESTful API endpoints
+* Basic Authentication
+* Dockerized setup
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📦 Data Sources
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Data is fetched from:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+* https://jsonplaceholder.typicode.com/
 
-## Agentic Development
+Resources:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+* Users (10)
+* Posts (100)
+* Comments (500)
+* Albums (100)
+* Photos (5000)
+* Todos (200)
+
+---
+
+## 🛠️ Tech Stack
+
+* Laravel
+* MySQL
+* Docker
+* Nginx
+* PHP 8.3
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <your-repo-url>
+cd json-fetch-app
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+### 2. Install dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Configure environment
 
-## Security Vulnerabilities
+Copy `.env` file:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
 
-## License
+Update database settings:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=json_fetch
+DB_USERNAME=root
+DB_PASSWORD=root
+
+CACHE_STORE=file
+```
+
+---
+
+### 4. Run Docker
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+### 5. Run migrations
+
+```bash
+docker exec -it laravel_app php artisan migrate
+```
+
+---
+
+### 6. Fetch data from API
+
+```bash
+docker exec -it laravel_app php artisan fetch:api-data
+```
+
+---
+
+## 🔐 Authentication
+
+This project uses **Basic Authentication**.
+
+All users are assigned a default password:
+
+```text
+password
+```
+
+### Example credentials:
+
+* Email: [Sincere@april.biz](mailto:Sincere@april.biz)
+* Password: password
+
+---
+
+## 📡 API Endpoints
+
+Base URL:
+
+```
+http://localhost:8006/api
+```
+
+### 🔹 Users
+
+```
+GET /users
+```
+
+### 🔹 Posts
+
+```
+GET    /posts
+GET    /posts/{id}
+GET    /posts/{id}/comments
+POST   /posts
+PUT    /posts/{id}
+PATCH  /posts/{id}
+DELETE /posts/{id}
+```
+
+### 🔹 Comments
+
+```
+GET /comments
+GET /comments?postId=1
+```
+
+### 🔹 Albums
+
+```
+GET /albums
+```
+
+### 🔹 Photos
+
+```
+GET /photos
+```
+
+### 🔹 Todos
+
+```
+GET /todos
+```
+
+---
+
+## 🧪 Testing
+
+Use Postman or any REST client.
+
+Make sure to:
+
+* Set Authorization → Basic Auth
+* Use valid email and password (`password`)
+
+---
+
+## 🗄️ Database Structure
+
+The database is normalized with relationships:
+
+* Users → Posts
+* Posts → Comments
+* Users → Albums → Photos
+* Users → Todos
+
+---
+
+## 🐳 Docker Services
+
+* PHP (Laravel)
+* MySQL
+* Nginx
+
+---
+
+## 📌 Notes
+
+* API returns stored data from database
+* Authentication is required for all endpoints
+* Data is fetched once using Artisan command
+
+---
+
+## cURL for Postman
+## GET ALL
+curl --location 'http://localhost:8006/api/posts/' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## GET POST BY ID
+curl --location 'http://localhost:8006/api/posts/1' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## GET POST BY ID COMMENTS
+curl --location 'http://localhost:8006/api/posts/1/comments' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## GET COMMENTS
+curl --location 'http://localhost:8006/api/comments/' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## GET ALBUMS
+curl --location 'http://localhost:8006/api/albums/' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## GET TODOS
+curl --location 'http://localhost:8006/api/todos/' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## GET USERS
+curl --location 'http://localhost:8006/api/users/' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+## UPDATE
+curl --location --request PUT 'http://localhost:8006/api/posts/1' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ=' \
+--data '{
+  "title": "Update Title"
+}'
+
+## PATCH
+curl --location --request PATCH 'http://localhost:8006/api/posts/1' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ=' \
+--data '{
+  "title": "Update Title"
+}'
+
+## DELETE
+curl --location --request DELETE 'http://localhost:8006/api/posts/2' \
+--header 'Authorization: Basic U2luY2VyZUBhcHJpbC5iaXo6cGFzc3dvcmQ='
+
+---
+
+## 👨‍💻 Author
+
+Ruel Almonia

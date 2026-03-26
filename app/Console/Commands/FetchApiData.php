@@ -77,7 +77,7 @@ class FetchApiData extends Command
                 [
                     'name' => $user['name'],
                     'email' => $user['email'],
-                    'password' => bcrypt('password'), // required field
+                    'password' => bcrypt('password'),
                 ]
             );
         });
